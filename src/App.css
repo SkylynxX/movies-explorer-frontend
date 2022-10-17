@@ -280,18 +280,25 @@
   color: #A0A0A0;
   mix-blend-mode: normal;
   max-width: 1140px;
-  margin: 100px auto 0 auto;
+  margin: 100px auto 50px auto;
 }
 
 .student__portfolio-item {
+  border: solid 1px red;
   max-width: 1140px;
   margin: 0 auto 0 auto;
   display: flex;
   justify-content: space-between;
   border-bottom: solid 1px #E8E8E8;
+  height: 69px;
+}
+
+.student__portfolio-item:last-child {
+  border-bottom: solid 1px white;
 }
 
 .student__portfolio-item_name {
+  border: solid 1px red;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -299,9 +306,54 @@
   line-height: 50px;
   letter-spacing: -0.04em;
   margin: 0;
+  height: 50px;
 }
 
-.student__portfolio-item_link {
+.student__portfolio-item_arrow {
+  border: solid 1px red;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 60px;
+  letter-spacing: -0.04em;
+  height: 100%;
+  margin: 0;
   width: 29px;
-  height: 60px;
+}
+
+.student__portfolio_ya {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #A0A0A0;
+}
+
+.footer {
+  max-width: 1140px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 0 auto;
+  border-top: solid 1px #E8E8E8;
+  padding-top: 20px;
+}
+
+.footer__year {
+
+}
+
+.footer__container {
+
+}
+
+.footer__container_yandex {
+  margin-right: 20px;
+  text-decoration: none;
+  color: black;
+}
+
+.footer__container_git {
+  text-decoration: none;
+  color: black;
 }

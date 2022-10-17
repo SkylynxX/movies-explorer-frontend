@@ -70,23 +70,26 @@ function App() {
             <p className='student__portfolio'>Портфолио</p>
             <div className='student__portfolio-item'>
                 <p className='student__portfolio-item_name'>Статичный сайт</p>
-                <img  className='student__portfolio-item_link' src={arrow} alt="" />
+                <p className='student__portfolio-item_arrow'>↗</p>
             </div>
             <div className='student__portfolio-item'>
                 <p className='student__portfolio-item_name'>Адаптивный сайт</p>
-                <img className='student__portfolio-item_link' src={arrow} alt="" />
+                <p className='student__portfolio-item_arrow'>↗</p>
             </div>
             <div className='student__portfolio-item'>
                 <p className='student__portfolio-item_name'>Одностраничное приложение</p>
-                <img className='student__portfolio-item_link' src={arrow} alt="" />
+                <p className='student__portfolio-item_arrow'>↗</p>
             </div>
-            <p>Учебный проект Яндекс.Практикум х BeatFilm.</p>
+            <p className='student__portfolio_ya'>Учебный проект Яндекс.Практикум х BeatFilm.</p>
         </section>
     </main>
-    <footer>
-        <p>© 2020</p>
-        <a href="">Яндекс.Практикум</a>
-        <a href="">Github</a>
+    <footer className='footer'>
+        <p className='footer__year'>© 2020</p>
+        <div className='footer__container'>
+          <a href="" className='footer__container_yandex'>Яндекс.Практикум</a>
+          <a href="" className='footer__container_git'>Github</a>
+        </div>
+        
     </footer>
 </body>
   );
