@@ -6,7 +6,7 @@ const Login = () => {
   return (
 
     <section className='login'>
-    <img src={circle} alt="" />
+    <img className='login__circle' src={circle} alt="" />
     <h2 className='login__title'>Рады видеть!</h2>
     <form action="" className='login__form'>
       <label className='login__form_label' htmlFor="">E-maill</label>
