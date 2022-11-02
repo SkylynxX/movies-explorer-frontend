@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "upload": "scp -r ./build/* lisa@51.250.4.254:/home/lisa/movies-explorer-frontend/build"
+    "upload": "scp -r ./build/* lisa@158.160.37.43:/home/lisa/movies-explorer-frontend/build"
   },
   "eslintConfig": {
     "extends": [
