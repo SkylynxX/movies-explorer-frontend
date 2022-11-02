@@ -25,13 +25,13 @@ export default function Navigation({ isLoggedIn, color }) {
   };
 
   return (
-    <div className={`header-menu ${isNavigationClosed && "header-menu_closed"}`} >
+    <div className={`header-menu ${isNavigationClosed ? "header-menu_closed" : ""}`} >
       <button className="header-menu__toggle" aria-label="навигация" type="button" onClick={openNavigation} >
-        <img src={menu} alt="menu" className="header-menu__open" />
+        <img src={menu} alt="Меню" className="header-menu__open" />
       </button>
       <div className= 'header-menu__container' >
         <button className="header-menu__close" aria-label="закрыть" type="button" onClick={closeNavigation} >
-          <img src={close} alt="close" className="header-menu__exit" />
+          <img src={close} alt="Крестик" className="header-menu__exit" />
         </button>
 
         {isLoggedIn && (

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Register = () => {
   return (
       <section className='register'>
-        <img className='register__circle' src={circle} alt="" />
+        <img className='register__circle' src={circle} alt="Круг" />
         <h2 className='register__title'>Добро пожаловать!</h2>
         <form action="" className='register__form'>
           <label className='register__form_label' htmlFor="">Имя</label>

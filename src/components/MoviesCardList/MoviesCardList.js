@@ -6,7 +6,7 @@ import filmImg from '../../images/film.png'
 export default function MoviesCardList({ isSaved }) {
   return (
     <section className="movies-card-list">
-      <div className="movies-card-list__container">
+      <ul className="movies-card-list__container">
         <MoviesCard
           name="Тест имя фильма, достаточно длинное"
           duration="8 часов 55 минут"
@@ -42,8 +42,8 @@ export default function MoviesCardList({ isSaved }) {
           isLiked={false}
           filmImg={filmImg}
         />
-      </div>
-      <button className={`movies-card-list__more-button  ${isSaved && "movies-card-list__more-button_disable"}`} type="button">Ещё</button>
+      </ul>
+      <button className={`movies-card-list__more-button  ${isSaved ? "movies-card-list__more-button_disable" : ""}`} type="button">Ещё</button>
     </section>
   );
 }

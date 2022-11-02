@@ -1,6 +1,7 @@
-
 .footer {
   padding-top: 79px;
+  max-width: 90%;
+  margin: 0 auto 0 auto;
 }
 
 .footer__title {
@@ -15,19 +16,13 @@
 }
 
 .footer__container {
-  max-width: 1140px;
+  /* max-width: 1140px; */
   display: flex;
   justify-content: space-between;
   margin: 0 auto 20px auto;
   border-top: solid 1px #E8E8E8;
   padding-top: 20px;
 } 
-
-@media (max-width: 768px) {
-  .footer__container  {
-    max-width: 708px; 
-  }
-}
 
 @media (max-width: 685px) {
   .footer__container {

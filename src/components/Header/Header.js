@@ -14,7 +14,7 @@ export default function Header({ color, isLoggedIn }) {
      <header className={`header_${color}`}>
         <div className={`header__container_${color}`}>
         <Link to={"/"}>
-            <img src={circle} alt="Logo" className="header__container_logo"  />
+            <img src={circle} alt="Логотип сайта, круг" className="header__container_logo"  />
         </Link>
         <Navigation
           isLoggedIn={isLoggedIn}

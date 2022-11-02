@@ -8,13 +8,15 @@ export default function MoviesCard({ name, duration, isSaved, isLiked, filmImg }
     unlike);
   
   return (
-    <div className='films__container'>
+  <li className='films__container'>
     <div className='films__container_info'>
       <p className='film__name'>{name}</p>
       <p className='film__time'>{duration}</p>
-      <img className='film__like' src={cardStatusImg} alt="" />
+      <button className='film__like-button'>
+        <img className='film__like-img' src={cardStatusImg} alt="Лайк" />
+      </button>
     </div>
-    <img className='film__img' src={filmImg} alt="" />
-  </div>
+    <img className='film__img' src={filmImg} alt="Обложка фильма" />
+  </li>
   );
 }

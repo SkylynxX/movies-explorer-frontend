@@ -23,20 +23,18 @@
 .switch {
 	display: flex;
 	align-items: center;
-	max-width: 1140px;
+	max-width: 90%;
 	margin: 32px auto 47px auto;
 }
 
 @media (max-width: 768px) {
 	.switch {
-	  max-width: 708px;
 	  flex-direction: row-reverse;
 	}
 }
 
 @media (max-width: 685px) {
 	.switch {
-	  max-width: 292px;
 	  justify-content: center;
 	  margin-top: 40px;
 	  margin-bottom: 90px;
@@ -57,8 +55,8 @@
 	-webkit-transition: 0.4s ease;
 	transition: 0.4s ease;
 	-webkit-tap-highlight-color: transparent;
-	height: 30px;
-	width: 50px;
+	height: 20px;
+	width: 36px;
 	box-shadow: 0px 4px 4px rgba(50, 50, 71, 0.08), 0px 4px 8px rgba(50, 50, 71, 0.06);
 	border-radius: 60px;
 }
@@ -71,11 +69,12 @@
 	-o-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
 	-webkit-transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
 	transition: 0.2s cubic-bezier(0.24, 0, 0.5, 1);
-	height: 30px;
-	width: 51px;
+	height: 20px;
+	width: 36px;
 	top: 0;
 	left: 0;
 	border-radius: 30px;
+	cursor: pointer
 }
 
 .switch input.switch__toggle + label:after {
@@ -87,11 +86,12 @@
 	-webkit-transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
 	transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
 	background: rgba(245, 245, 245, 1);
-	height: 24px;
-	width: 24px;
-	top: 3px;
+	height: 16px;
+	width: 16px;
+	top: 2px;
 	left: 2px;
 	border-radius: 60px;
+	cursor: pointer
 }
 
 .switch input.switch__toggle:checked + label:before {
@@ -103,7 +103,7 @@
 }
 
 .switch input.switch__toggle:checked + label:after {
-	left: 24px;
+	left: 18px;
 	background: rgba(43, 224, 128, 1);
 }
 

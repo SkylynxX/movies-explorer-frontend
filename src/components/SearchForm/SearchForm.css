@@ -1,25 +1,13 @@
 .search {
+    max-width: 90%;
+    margin: 70px auto 0 auto;
 }
 
 .search__container {
-    max-width: 1140px;
     height: 47px;
-    margin: 70px auto 0 auto;
     border-bottom: solid 1px rgba(232, 232, 232, 1);
     display: flex;
     justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-    .search__container {
-      max-width: 708px;
-    }
-}
-
-@media (max-width: 685px) {
-    .search__container {
-        max-width: 292px;
-    }
 }
 
 .search__query {
@@ -57,4 +45,5 @@
     font-size: 11px;
     text-align: center;
     border: none;
+    cursor: pointer
 }
