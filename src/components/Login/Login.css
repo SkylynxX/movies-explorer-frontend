@@ -1,0 +1,154 @@
+.login {
+  max-width: 396px;
+  margin: 70px auto 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+  .login {
+    margin-top: 232px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .login {
+    max-width: 260px;
+    margin-top: 56px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.login__circle{
+  height: 38px;
+  width: 38px;
+
+}
+
+@media screen and (max-width: 320px) {
+  .login__circle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.login__title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  margin: 40px 0 40px 0;
+}
+
+@media screen and (max-width: 320px) {
+  .login__title {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login__form_label {
+  color: rgba(160, 160, 160, 1);
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  margin-bottom: 10px;
+}
+
+.login__form_input {
+  border: none;
+  outline:none;
+  background-color: rgba(249, 249, 249, 1);
+  border-radius: 8px;
+  height: 46px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.login__button {
+  margin-top: 179px;
+  width: 100%;
+  height: 45px;
+  border-radius: 3px;
+  background-color: black;
+  color: white;
+}
+
+@media screen and (max-width: 320px) {
+  .login__button {
+    margin-top: 267px;
+  }
+}
+
+.login__bottom-box {
+  display: flex;
+  margin-top: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.login__bottom-box_question {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #A0A0A0;
+  margin: 0;
+}
+
+@media screen and (max-width: 320px) {
+  .login__bottom-box_question {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
+.login__bottom-box_link {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  color: black;
+  margin: 0 0 0 6px;
+}
+
+@media screen and (max-width: 320px) {
+  .login__bottom-box_link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
+.login__form_error-email {
+  width: 100%;
+  height: 10px;
+  color: rgba(255, 64, 98, 1);
+  margin: 5px 0 5px 0;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.login__form_error-password {
+  width: 100%;
+  height: 10px;
+  color: rgba(255, 64, 98, 1);
+  margin: 5px 0 5px 0;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+}

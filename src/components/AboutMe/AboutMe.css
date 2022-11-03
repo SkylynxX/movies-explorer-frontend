@@ -1,0 +1,149 @@
+.student {
+  max-width: 90%;
+  margin: 0 auto 0 auto;
+}
+
+.student__title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  /* max-width: 1140px; */
+  margin: 0 auto 70px auto;
+  border-bottom: solid 1px black;
+  padding-bottom: 23px;
+  padding-top: 110px;
+}
+
+@media (max-width: 768px) {
+  .student__title {
+    /* max-width: 668px; */
+    padding-top: 90px;
+    margin-bottom: 90px;
+  }
+}
+
+@media (max-width: 685px) {
+  .student__title {
+    /* max-width: 292px; */
+    margin-bottom: 60px;
+    padding-top: 70px;
+  }
+}
+
+.student__container {
+  max-width: 100%;
+  margin: 0 auto 0 auto;
+  display: grid;
+  grid-template-columns: auto 270px;
+  column-gap: 270px;
+}
+
+@media (max-width: 870px) {
+  .student__container {
+    /* max-width: 668px; */
+    column-gap: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .student__container {
+    /* max-width: 668px; */
+    column-gap: 49px;
+  }
+}
+
+@media (max-width: 685px) {
+  .student__container {
+    /* max-width: 292px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+.student__container_name {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+@media (max-width: 685px) {
+  .student__container_name {
+    margin-bottom: 20px;
+  }
+}
+
+.student__container_work {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  mix-blend-mode: normal;
+  margin: 0;
+}
+
+@media (max-width: 685px) {
+  .student__container_work {
+    margin-bottom: 20px;
+  }
+}
+
+.student__container_info {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  mix-blend-mode: normal;
+}
+
+@media (max-width: 685px) {
+  .student__container_info {
+    margin-bottom: 40px;
+  }
+}
+
+.student__container_pfoto {
+  width: 270px;
+  height: 327px;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  grid-row-end: 4;
+}
+
+@media (max-width: 768px) {
+  .student__container_pfoto {
+    width: 255px;
+    height: 307px;
+  }
+}
+
+@media (max-width: 685px) {
+  .student__container_pfoto {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 320px) {
+  .student__container_pfoto {
+    width: 292px;
+    height: 352px;
+  }
+}
+
+.student__container_git {
+  margin-top: 0;
+  text-decoration:none;
+  color: black;
+}
+
+
