@@ -5,7 +5,7 @@ export default function FilterCheckbox({toggleSearchShortMovieHandler, isSearchS
   return (
     <label>
       <div className="switch">
-        <input className="switch__toggle" type="checkbox" name="toggle1" id="toggle1" defaultChecked/>
+        <input className="switch__toggle" type="checkbox" name="toggle1" id="toggle1" checked={isSearchShortMovie} onChange={toggleSearchShortMovieHandler}/>
         <label htmlFor="toggle1"></label>
         <span className="switch__text">Короткометражки</span>
       </div>

@@ -75,7 +75,11 @@
   line-height: 16px;
   color: #000000;
 }
+login__form_input_disabled{
+  background-color: rgb(173, 173, 173);
+  color: #646464;
 
+}
 .login__button {
   margin-top: 179px;
   width: 100%;
@@ -83,6 +87,14 @@
   border-radius: 3px;
   background-color: black;
   color: white;
+}
+.login__button:hover {
+  background-color: rgb(50, 50, 50);
+}
+
+.login__button_disabled {
+  background-color: rgb(100, 100, 100);
+  color: rgb(185, 185, 185);
 }
 
 @media screen and (max-width: 320px) {

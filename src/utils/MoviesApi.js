@@ -6,7 +6,6 @@ export class MoviesApi {
   //Общая обработка результата запроса: ok - возвращаем сериализованный ответ, not ok - возвращаем промис со статусом  (аргумент - объект Response возвращемый промисом fetch)
   _returnStatus(res) {
     if (res.ok) {
-      // console.log(res)
       return res.json();
     } else {
       return Promise.reject(`Ошибка: ${res.status}`);

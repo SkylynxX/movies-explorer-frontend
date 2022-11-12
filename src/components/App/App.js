@@ -18,15 +18,56 @@ import "./App.css";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
-  const [movies, setMovies] = useState([]);
+  // let _searchRequest;
+  let movies = [];
   const [filteredMovies, setFilteredMovies] = useState([]);
+  const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
   const [isSearchShortMovie, setSearchShortMovie] = useState(false);
+  const [searchMovieString, setSearchMovieString] = useState("");
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [isRequestProcessed, setRequestProcessed] = useState(false);
-  const [isRequestSuccess, setRequestSuccess] = useState(false);
+  const [isMoviesRequestProcessed, setMoviesRequestProcessed] = useState(false);
+  const [isMoviesRequestSuccess, setMoviesRequestSuccess] = useState(false);
+  const [isUserRequestProcessed, setUserRequestProcessed] = useState(false);
+  const [isUserRequestSuccess, setUserRequestSuccess] = useState(false);
   const history = useHistory();
-  const current = history.location.pathname;
+
+  //в качестве примера использован ответ 1: https://stackoverflow.com/questions/57025569/react-execute-script-if-window-width
+  const [width, setWidth] = useState(window.innerWidth);
+  const [moviesListSize, setMoviesListSize] = useState(7);
+  const [moviesListAddition, setMoviesListAddition] = useState(7);
+
+  useEffect(() => {
+    function handleResize() {
+      setTimeout(() => {
+        setWidth(window.innerWidth);
+      }, 500);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [width]);
+
+  useEffect(() => {
+    if(width < 768) {
+      setMoviesListAddition(5);
+    } else {
+      setMoviesListAddition(7);
+    }
+  },[width]);
+
+  function addMoviesListCallback(additionSizeSettings) {
+    if (additionSizeSettings==='default')
+    {
+      setMoviesListSize(moviesListAddition);
+    } else {
+      setMoviesListSize(moviesListSize + moviesListAddition);
+    }
+  }
+
+  useEffect(() => {
+    filterSavedMovies(searchMovieString);
+  }, [savedMovies]);
+  
 
   useEffect(() => {
     //валидируем токен через API авторизации
@@ -46,13 +87,14 @@ function App() {
           console.log(err);
         });
     }
+  
   }, [history]);
-
+  
   useEffect(() => {
     mainAPI
       .getUserInfo()
       .then((rxUserInfo) => {
-        setCurrentUser(rxUserInfo); //все данные получены, отрисовываем страницу
+        setCurrentUser(rxUserInfo);
       })
       .catch((err) => {
         //попадаем сюда если промис завершится ошибкой
@@ -61,135 +103,225 @@ function App() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (current === "saved-movie" && isLoggedIn) {
-      setRequestProcessed(true);
-      setRequestSuccess(true);
-      mainAPI
-        .getSavedMovies()
-        .then((rxSavedMovies) => {
-          setSavedMovies(rxSavedMovies); //все данные получены, отрисовываем страницу
-          setRequestProcessed(false);
-          setRequestSuccess(true);
-        })
-        .catch((err) => {
-          setRequestSuccess(false);
-          setRequestProcessed(false);
-          //попадаем сюда если промис завершится ошибкой
-          console.log(err);
-        });
+    if (isLoggedIn) {
+      getSavedMovies("");
     }
-  }, [history, current, isLoggedIn]);
+  }, [isLoggedIn]);
+  
+// useEffect(() => {
+//   console.log(isRequestProcessed);
+// }, [isRequestProcessed]);
 
   function filterMovies(searchRequest) {
-    console.log(searchRequest);
-    console.log(movies);
-    // console.log(movies.filter((item) => { return true}));
-    setFilteredMovies(movies.filter((item) => { console.log(item); return item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1 }));
+
+    let filterRes = []
+    if (searchRequest) {
+      filterRes = movies.filter((item) => { return ((item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1)
+       && (isSearchShortMovie ?  item.duration <= 40 : true))  });
+    }
+    // console.log(filterRes);
+    setFilteredMovies(filterRes);
   }
 
-   function getMovies(searchRequest) {
-    if (current === "/movies" && !movies.length) {
-      setRequestSuccess(true);
-      setRequestProcessed(true);
+  function filterSavedMovies(searchRequest) {
+    let filterRes = []
+    if (searchRequest) {
+      filterRes = savedMovies.filter((item) => { return ((item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1)
+       && (isSearchShortMovie ?  item.duration <= 40 : true))  });
+    }
+    //  console.log(filterRes);
+    setFilteredSavedMovies(filterRes);
+  }
+
+  function getMovies() {
+    // if (!localStorage.hasOwnProperty("movies")) {
+      if (! movies.length) {
+      setMoviesRequestSuccess(false);
+      setMoviesRequestProcessed(true);
       moviesAPI
         .getInitialMoviess()
         .then((rxMovies) => {
-          setMovies(rxMovies); //все данные получены, отрисовываем страницу
-          filterMovies(searchRequest);
-          setRequestSuccess(true);
-          setRequestProcessed(false);
+          // localStorage.setItem("movies", JSON.stringify(rxMovies));
+          movies = rxMovies;
+          filterMovies(searchMovieString);
+          setMoviesRequestSuccess(true);
+          setMoviesRequestProcessed(false);
         })
         .catch((err) => {
-          setRequestSuccess(false);
-          setRequestProcessed(false);
+          setMoviesRequestSuccess(false);
+          setMoviesRequestProcessed(false);
           //попадаем сюда если промис завершится ошибкой
           console.log(err);
         });
+        // console.log("getMovies(searchRequest) API done");
+    } else if (history.location.pathname === "/movies" && movies.length) {
+      setMoviesRequestSuccess(false);
+      setMoviesRequestProcessed(true);
+      // movies = JSON.parse(localStorage.getItem("movies"));
+      // console.log(movies);
+      filterMovies(searchMovieString);
+      setMoviesRequestSuccess(true);
+      setMoviesRequestProcessed(false);
+      // console.log("getMovies(searchRequest) done");
     }
+    // } else if (history.location.pathname === "/movies") {
+    //   setMoviesRequestSuccess(false);
+    //   setMoviesRequestProcessed(true);
+    //   movies = JSON.parse(localStorage.getItem("movies"));
+    //   console.log(movies);
+    //   filterMovies(searchMovieString);
+    //   setMoviesRequestSuccess(true);
+    //   setMoviesRequestProcessed(false);
+    //   console.log(isMoviesRequestSuccess);
+    //   console.log(isMoviesRequestProcessed);
+
+    // }
   }
+
+  function getSavedMovies() {
+    // if (!localStorage.hasOwnProperty("movies")) {
+      mainAPI
+      .getSavedMovies()
+      .then((rxSavedMovies) => {
+        setSavedMovies(rxSavedMovies);
+        // console.log(rxSavedMovies);
+        setMoviesRequestProcessed(false);
+        setMoviesRequestSuccess(true);
+      })
+      .catch((err) => {
+        setMoviesRequestSuccess(false);
+        setMoviesRequestProcessed(false);
+        //попадаем сюда если промис завершится ошибкой
+        console.log(err);
+      });
+  }
+
+
+
+
 
   function searchMoviesCallback(searchRequest) {
-    if (current === "/movies") {
-      getMovies(searchRequest);
+    setSearchMovieString(searchRequest);
+    if (history.location.pathname === "/movies") {
+      getMovies();
+    } else if (history.location.pathname === "/saved-movies") {
+      getSavedMovies();
     }
   }
 
+  
   function toggleSearchShortMovieHandler() {
     setSearchShortMovie(!isSearchShortMovie);
   }
 
   function redirectToSignIn() {
-    history.push("/sign-in");
+    handleSignOut();
+    history.push("/signin");
   }
 
   function handleSignUp(userData) {
-    // console.log(userData);
+    setUserRequestSuccess(false);
+    setUserRequestProcessed(true);
     mainAPI
       .signUp(userData)
       .then((userData) => {
-        //В случае успешной регистрации показываем сообщение успеха
-        setRequestSuccess(true);
-        //Ждем 2 секунды чтобы дать человеку насладиться его успехом,
-        //делаем редирект для возможности пользователю войти, воспользовавшись плодами его успеха
-        setTimeout(redirectToSignIn, 2000);
+      setUserRequestSuccess(true);
+      setUserRequestProcessed(false);
+        //Ждем 5 секунды чтобы дать человеку прочитать что у него всё получилось
+        setTimeout(redirectToSignIn, 5000);
       })
       .catch((err) => {
         //В случае не успешной регистрации показываем окно не успеха
-        setRequestSuccess(false);
+      setUserRequestSuccess(false);
+      setUserRequestProcessed(false);
         console.log(err);
       });
   }
 
   function handleSignIn(userData) {
     // console.log(userData);
+    setUserRequestProcessed(true);
+    setUserRequestSuccess(false);
     mainAPI
       .signIn(userData)
       .then((userReceivedData) => {
         // console.log(userReceivedData);
         //В случае успешной авторизации
         localStorage.setItem("jwt", userReceivedData.token);
-        setRequestSuccess(true);
+        setUserRequestSuccess(true);
+        setUserRequestProcessed(false);
         setLoggedIn(true);
         history.push("/");
       })
       .catch((err) => {
         //В случае не успешной авторизации показываем окно не успеха
-        setRequestSuccess(false);
+        setUserRequestSuccess(false);
+        setUserRequestProcessed(false);
+        console.log(err);
+      });
+  }
+
+  function handleUpdateUser(userData) {
+    // console.log(userData);
+    setUserRequestProcessed(true);
+    setUserRequestSuccess(false);
+    mainAPI
+      .setUserInfo(userData)
+      .then((userReceivedData) => {
+        // console.log(userReceivedData);
+        //В случае успешной авторизации
+        setUserRequestSuccess(true);
+        setUserRequestProcessed(false);
+      })
+      .catch((err) => {
+        //В случае не успешной авторизации показываем окно не успеха
+        setUserRequestSuccess(false);
+        setUserRequestProcessed(false);
         console.log(err);
       });
   }
 
   function handleSignOut() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("movies");
+    setSavedMovies([]);
     setLoggedIn(false);
+
   }
 
   function handleMovieSave(movie) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    // const isLiked = card.likes.some((i) => i === currentUser._id);
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    // mainAPI
-    //   .changeLikeCardStatus(card._id, !isLiked)
-    //   .then((newCard) => {
-    //     setCards((state) =>
-    //       state.map((c) => (c._id === card._id ? newCard : c))
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    setMoviesRequestSuccess(false);
+    setMoviesRequestProcessed(true);
+    mainAPI
+      .addSavedMovie(movie)
+      .then((newMovie) => {
+        setSavedMovies((prevState) => prevState.concat(newMovie));
+        // console.log(savedMovies);
+        setMoviesRequestSuccess(true);
+        setMoviesRequestProcessed(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setMoviesRequestSuccess(false);
+        setMoviesRequestProcessed(false);
+      });
   }
 
-  function handleMovieDelete(card) {
-    //console.log('delete card enter');
-    // mainAPI
-    //   .removeCard(card._id)
-    //   .then(() => {
-    //     setCards((state) => state.filter((item) => item !== card));
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  function handleMovieDelete(movie) {
+    setMoviesRequestSuccess(false);
+    setMoviesRequestProcessed(true);
+    mainAPI
+      .removeSavedMovie(movie._id)
+      .then(() => {
+        setSavedMovies((prevState) => prevState.filter((item) => item.movieId !== movie.id));
+        setMoviesRequestSuccess(true);
+        setMoviesRequestProcessed(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setMoviesRequestSuccess(false);
+        setMoviesRequestProcessed(false);
+      });
   }
 
   return (
@@ -197,19 +329,19 @@ function App() {
       <div className="root">
         <Switch>
           <Route exact path="/">
-            <Header color="pink" isLoggedIn={true} />
+            <Header color="pink" isLoggedIn={isLoggedIn} />
             <Main />
             <Footer />
           </Route>
           <Route path="/signin">
-            <Login />
+            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
           </Route>
           <Route path="/signup">
-            <Register />
+            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
           </Route>
           <Route path="/profile">
-            <Header color="white" isLoggedIn={isLoggedIn} />
-            <Profile />
+            <Header color="white" isLoggedIn={isLoggedIn}/>
+            <Profile onLogOut={handleSignOut} onUpdate={handleUpdateUser}/>
           </Route>
           <Route path="/movies">
             <Header color="white" isLoggedIn={isLoggedIn} />
@@ -217,18 +349,35 @@ function App() {
               searchMoviesCallback={searchMoviesCallback}
               toggleSearchShortMovieHandler={toggleSearchShortMovieHandler}
               isSearchShortMovie={isSearchShortMovie}
-              movies={movies}
-              isProcessed={isRequestProcessed}
-              isRequestSuccess={isRequestSuccess}
+              movies={filteredMovies}
+              savedMovies={savedMovies}
+              isProcessed={isMoviesRequestProcessed}
+              isRequestSuccess={isMoviesRequestSuccess}
+              onAddMovie={addMoviesListCallback}
+              moviesListSize={moviesListSize}
+              onLike={handleMovieSave}
+              onUnlike={handleMovieDelete}
+              searchMovieString={searchMovieString}
+              setSearchMovieString={setSearchMovieString}
             />
             <Footer />
           </Route>
           <Route path="/saved-movies">
             <Header color="white" isLoggedIn={isLoggedIn} />
             <SavedMovies
+              searchMoviesCallback={searchMoviesCallback}
+              toggleSearchShortMovieHandler={toggleSearchShortMovieHandler}
+              isSearchShortMovie={isSearchShortMovie}
+              movies={filteredSavedMovies}
               savedMovies={savedMovies}
-              isProcessed={isRequestProcessed}
-              isRequestSuccess={isRequestSuccess}
+              isProcessed={isMoviesRequestProcessed}
+              isRequestSuccess={isMoviesRequestSuccess}
+              onAddMovie={addMoviesListCallback}
+              moviesListSize={savedMovies.length}
+              onLike={handleMovieSave}
+              onUnlike={handleMovieDelete}
+              searchMovieString={searchMovieString}
+              setSearchMovieString={setSearchMovieString}
             />
             <Footer />
           </Route>

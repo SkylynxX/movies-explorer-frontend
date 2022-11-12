@@ -9,6 +9,7 @@ export class MainApi {
     if (res.ok) {
       return res.json();
     } else {
+      // console.log(res);
       return Promise.reject(`Ошибка: ${res.status}`);
     }
   }
@@ -61,7 +62,7 @@ export class MainApi {
       headers: this._validateHeader(),
       body: JSON.stringify({
         name: userInfoData.name,
-        about: userInfoData.email,
+        email: userInfoData.email,
       }),
     }).then(this._returnStatus);
   }
@@ -83,12 +84,12 @@ export class MainApi {
         duration: movieData.duration,
         year: movieData.year,
         description: movieData.description,
-        image: movieData.image,
-        trailer: movieData.trailer,
+        image: `https://api.nomoreparties.co${movieData.image.url}`,
+        trailer: movieData.trailerLink,
         nameRU: movieData.nameRU,
         nameEN: movieData.nameEN,
-        thumbnail: movieData.thumbnail,
-        movieId: movieData.movieId,
+        thumbnail: `https://api.nomoreparties.co${movieData.image.formats.thumbnail.url}`,
+        movieId: movieData.id,
       }),
     }).then(this._returnStatus);
   }
@@ -117,7 +118,8 @@ export class MainApi {
 
 //экземпляр класса для экпорта
 const mainAPI = new MainApi({
-  baseUrl: "https://diplom-api.SkylynxX.nomoredomains.icu",
+  // baseUrl: "http://localhost:3000",
+  baseUrl: "https://api-diplom.skylynxx.nomoredomains.icu",
   headers: {
     "Content-Type": "application/json",
   },

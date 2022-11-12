@@ -47,3 +47,15 @@
     border: none;
     cursor: pointer
 }
+
+.search__find:hover {
+    background: rgb(10, 10, 10);
+}
+
+.search__find_disabled {
+    background: rgb(70, 70, 70);
+}
+
+.search__find_disabled:hover {
+    background: rgb(70, 70, 70);
+}

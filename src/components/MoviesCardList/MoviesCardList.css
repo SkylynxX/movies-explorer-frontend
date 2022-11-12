@@ -4,6 +4,9 @@
   margin: 0 auto 0 auto;
 }
 
+.movies-card-list_none {
+  display: none;
+}
 .movies-card-list__more-button {
   font-family: 'Inter';
   font-style: normal;
