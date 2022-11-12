@@ -51,6 +51,7 @@
   width: 335px;
   border: none;
   height: 100%;
+  text-align: end;
 }
 
 .profile__form_name_disabled {
@@ -68,6 +69,7 @@
   width: 335px;
   border: none;
   padding: 0;
+  text-align: end;
 }
 
 .profile__form_maill_disabled {
