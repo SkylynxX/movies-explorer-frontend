@@ -13,6 +13,7 @@ import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import mainAPI from "../../utils/MainApi";
 import moviesAPI from "../../utils/MoviesApi";
+import {ProtectedRoute} from "../ProtectedRoute/ProtectedRoute";
 
 import "./App.css";
 
@@ -113,7 +114,6 @@ function App() {
 // }, [isRequestProcessed]);
 
   function filterMovies(searchRequest) {
-
     let filterRes = []
     if (searchRequest) {
       filterRes = movies.filter((item) => { return ((item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1)
@@ -133,6 +133,7 @@ function App() {
     setFilteredSavedMovies(filterRes);
   }
 
+
   function getMovies() {
     // if (!localStorage.hasOwnProperty("movies")) {
       if (! movies.length) {
@@ -141,7 +142,7 @@ function App() {
       moviesAPI
         .getInitialMoviess()
         .then((rxMovies) => {
-          // localStorage.setItem("movies", JSON.stringify(rxMovies));
+          localStorage.setItem("movies", JSON.stringify(rxMovies));
           movies = rxMovies;
           filterMovies(searchMovieString);
           setMoviesRequestSuccess(true);
@@ -157,25 +158,13 @@ function App() {
     } else if (history.location.pathname === "/movies" && movies.length) {
       setMoviesRequestSuccess(false);
       setMoviesRequestProcessed(true);
-      // movies = JSON.parse(localStorage.getItem("movies"));
+      movies = JSON.parse(localStorage.getItem("movies"));
       // console.log(movies);
       filterMovies(searchMovieString);
       setMoviesRequestSuccess(true);
       setMoviesRequestProcessed(false);
       // console.log("getMovies(searchRequest) done");
     }
-    // } else if (history.location.pathname === "/movies") {
-    //   setMoviesRequestSuccess(false);
-    //   setMoviesRequestProcessed(true);
-    //   movies = JSON.parse(localStorage.getItem("movies"));
-    //   console.log(movies);
-    //   filterMovies(searchMovieString);
-    //   setMoviesRequestSuccess(true);
-    //   setMoviesRequestProcessed(false);
-    //   console.log(isMoviesRequestSuccess);
-    //   console.log(isMoviesRequestProcessed);
-
-    // }
   }
 
   function getSavedMovies() {
@@ -328,22 +317,12 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
         <Switch>
-          <Route exact path="/">
-            <Header color="pink" isLoggedIn={isLoggedIn} />
-            <Main />
-            <Footer />
-          </Route>
-          <Route path="/signin">
-            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
-          <Route path="/signup">
-            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
-          <Route path="/profile">
+
+          <ProtectedRoute path="/profile" isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn}/>
             <Profile onLogOut={handleSignOut} onUpdate={handleUpdateUser}/>
-          </Route>
-          <Route path="/movies">
+          </ProtectedRoute>
+          <ProtectedRoute path="/movies" isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn} />
             <Movies
               searchMoviesCallback={searchMoviesCallback}
@@ -361,8 +340,8 @@ function App() {
               setSearchMovieString={setSearchMovieString}
             />
             <Footer />
-          </Route>
-          <Route path="/saved-movies">
+          </ProtectedRoute>
+          <ProtectedRoute path="/saved-movies"  isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn} />
             <SavedMovies
               searchMoviesCallback={searchMoviesCallback}
@@ -380,6 +359,18 @@ function App() {
               setSearchMovieString={setSearchMovieString}
             />
             <Footer />
+          </ProtectedRoute>
+          
+          <Route exact path="/">
+            <Header color="pink" isLoggedIn={isLoggedIn} />
+            <Main />
+            <Footer />
+          </Route>
+          <Route path="/signin">
+            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
+          </Route>
+          <Route path="/signup">
+            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
           </Route>
           <Route path="*">
             <Error404 />

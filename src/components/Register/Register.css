@@ -88,11 +88,15 @@
   color: white;
 }
 .register__button:hover {
-  background-color: rgb(50, 50, 50);
+  background-color: rgb(30, 30, 30);
 }
 
 .register__button_disabled {
-  background-color: rgb(100, 100, 100);
+  background: rgb(70, 70, 70);
+  color: rgb(185, 185, 185);
+}
+.register__button_disabled:hover {
+  background: rgb(70, 70, 70);
   color: rgb(185, 185, 185);
 }
 

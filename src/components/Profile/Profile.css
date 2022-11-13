@@ -1,6 +1,8 @@
 .profile {
   max-width: 410px;
   margin: 0 auto 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 430px) {
@@ -19,8 +21,8 @@
 }
 
 .profile__form {
-
-
+  display: flex;
+  flex-direction: column;
 }
 
 .profile__form_box-name {
@@ -55,7 +57,7 @@
 }
 
 .profile__form_name_disabled {
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
   color: #c2c2c2;
 }
 
@@ -73,7 +75,7 @@
 }
 
 .profile__form_maill_disabled {
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
   color: #c2c2c2;
 }
 
@@ -87,7 +89,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 220px;
+  
 }
 
 @media (max-width: 430px) {
@@ -102,16 +104,20 @@
   margin-bottom: 17px;
   border: none;
   background-color: white;
+  margin: 220px 0 16px 0;
+  padding: 0;
+  align-items: center;
 }
 
 .profile__navigation_out {
   text-decoration: none;
   color: rgba(255, 64, 98, 1);
+  margin: 0 auto 0 auto;
 }
 
 .profile__form_name-error{
   width: 100%;
-  max-height: 12px;
+  min-height: 12px;
   color: rgba(255, 64, 98, 1);
   margin: 0;
   padding: 0;
@@ -122,7 +128,7 @@
 
 .profile__form_maill-error {
   width: 100%;
-  max-height: 12px;
+  min-height: 12px;
   color: rgba(255, 64, 98, 1);
   margin: 0;
   padding: 0;

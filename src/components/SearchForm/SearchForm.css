@@ -9,7 +9,15 @@
     display: flex;
     justify-content: space-between;
 }
-
+.search__form_error {
+    width: 100%;
+    height: 10px;
+    color: rgba(255, 64, 98, 1);
+    margin: 5px 0 5px 0;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+  }
 .search__query {
   border: none;
   font-family: 'Inter';
@@ -49,13 +57,15 @@
 }
 
 .search__find:hover {
-    background: rgb(10, 10, 10);
+    background: rgb(30, 30, 30);
 }
 
 .search__find_disabled {
     background: rgb(70, 70, 70);
+    color: rgb(185, 185, 185);
 }
 
 .search__find_disabled:hover {
     background: rgb(70, 70, 70);
+    color: rgb(185, 185, 185);
 }

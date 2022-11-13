@@ -9,7 +9,7 @@ export default function MoviesCard({ isSaved, isLiked, onLike, onUnlike, movie})
   function buttonHandler(){
     if(isSaved) {
       movie.id = movie.movieId;
-      console.log(movie)
+      // console.log(movie)
       onUnlike(movie);
     } else if (isLiked) {
       movie._id = isLiked._id;
