@@ -4,14 +4,26 @@ import "./MoviesCardList.css";
 
 export default function MoviesCardList({ isSaved, movies,savedMovies, isProcessed,  isRequestSuccess, onAddMovie, moviesListSize, onLike, onUnlike}) {
   const [isRequestExecuted,setRequestExecuted] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(window.pageYOffset);
   useEffect(() => {
     if (isProcessed) {
       setRequestExecuted(true);
+    } else {
+      window.scrollTo(0 ,scrollPosition);
     }
     if(!isRequestExecuted){
       onAddMovie('default');
     }
   }, [isProcessed]);
+
+  function onLikeHandler(movie){
+    setScrollPosition(window.pageYOffset);
+    onLike(movie);
+  }
+  function onUnikeHandler(movie){
+    setScrollPosition(window.pageYOffset);
+    onUnlike(movie);    
+  }
   
 
 
@@ -25,8 +37,8 @@ export default function MoviesCardList({ isSaved, movies,savedMovies, isProcesse
               key={item.id || item._id}
               isSaved={isSaved}
               isLiked={savedMovies.find(sItem => item.id === sItem.movieId)}
-              onLike={onLike}
-              onUnlike={onUnlike}
+              onLike={onLikeHandler}
+              onUnlike={onUnikeHandler}
               movie={item}
             />
           );

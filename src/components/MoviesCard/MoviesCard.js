@@ -22,13 +22,13 @@ export default function MoviesCard({ isSaved, isLiked, onLike, onUnlike, movie})
   return (
   <li className='films__container'>
     <div className='films__container_info'>
-      <a className='film__name' href={`${isSaved ? movie.trailer : movie.trailerLink}`}>{movie.nameRU}</a>
+      <a className='film__name' href={`${isSaved ? movie.trailer : movie.trailerLink}`} target="_blank" rel="noopener noreferrer">{movie.nameRU}</a>
       <p className='film__time'>{(movie.duration>=60 ? Math.ceil(movie.duration/60) + "ч ": "") + (movie.duration%60 ? movie.duration%60 + "м" : "") }</p>
       <button className='film__like-button' onClick={buttonHandler}>
         <img className='film__like-img' src={cardStatusImg} alt="Лайк" />
       </button>
     </div>
-    <a href={`${isSaved ? movie.trailer : movie.trailerLink}`}><img className='film__img' src={isSaved ? `${movie.image}`: `https://api.nomoreparties.co${movie.image.url}`} alt="Обложка фильма" /></a>
+    <a href={`${isSaved ? movie.trailer : movie.trailerLink}`} target="_blank" rel="noopener noreferrer"><img className='film__img' src={isSaved ? `${movie.image}`: `https://api.nomoreparties.co${movie.image.url}`} alt="Обложка фильма" /></a>
   </li>
   );
 }

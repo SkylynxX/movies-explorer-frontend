@@ -42,7 +42,9 @@ const Register = ({onSignUp, isProcessed, isRequestSuccess}) => {
 
   return (
       <section className='register'>
-        <img className='register__circle' src={circle} alt='Круг' />
+        <Link className='register__link-circle' aria-label="логотип" to="/">
+          <img className='register__circle' src={circle} alt='Круг' />
+        </Link>
         <h2 className='register__title'>Добро пожаловать!</h2>
         <form action="" className='register__form' name='signup' onSubmit={handleSubmit}>
           <label className='register__form_label' htmlFor="">Имя</label>
@@ -54,7 +56,7 @@ const Register = ({onSignUp, isProcessed, isRequestSuccess}) => {
           <label className='register__form_label' htmlFor="">Пароль</label>
           <input className={`register__form_input ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "register__form_input_disabled" : ""}`} id="input-password" type="password" required name="password" minLength="3" maxLength="40" value={password} onChange={handleChangePassword} placeholder="" disabled = {(isProcessed  || (isRequestExecuted && isRequestSuccess))? "disabled" : ""}/>
           <p className='register__form_error'>{formValidator.errors.password}</p>
-          <p className={`register__form_error ${!isProcessed && isRequestExecuted ? "" : "register__form_error-pasword_none"}`}> {isRequestSuccess ? "Вы успешно зараегестрировали нового пользователя, сейчас вы будете переадресованы на страну входа." : "Возникла ошибка при регистрации, свяжитесь со службой техподдержки"}</p>
+          <p className={`register__form_error ${!isProcessed && isRequestExecuted ? "" : "register__form_error-pasword_none"}`}> {isRequestSuccess ? "Вы успешно зараегестрировали нового пользователя, сейчас вы будете переадресованы на страницу поиска фильмов." : "Возникла ошибка при регистрации, свяжитесь со службой техподдержки"}</p>
           <button className={`register__button ${(isProcessed  || (isRequestExecuted && isRequestSuccess) || !formValidator.isValid) ? "register__button_disabled" : ""}`} disabled = {(isProcessed  || (isRequestExecuted && isRequestSuccess)|| !formValidator.isValid) ? "disabled" : ""}>Зарегистрироваться</button>
           </form>
         <div className='register__bottom-box'>

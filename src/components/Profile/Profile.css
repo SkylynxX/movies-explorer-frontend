@@ -109,6 +109,9 @@
   align-items: center;
 }
 
+.profile__navigation_change_disabled {
+  color: rgb(150, 150, 150);
+}
 .profile__navigation_out {
   text-decoration: none;
   color: rgba(255, 64, 98, 1);

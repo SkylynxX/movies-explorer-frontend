@@ -9,6 +9,7 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isRequestExecuted,setRequestExecuted] = useState(false);
+  const [isChangesDetected,setChangesDetected] = useState(false);
   const formValidator = useFormWithValidation();
 
   useEffect(() => {
@@ -20,12 +21,27 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
   function handleChangeEmail(e) {
     setEmail(e.target.value);
     formValidator.handleChange(e);
+    if((currentUser.name !== name) || currentUser.email !== email) {
+      setChangesDetected(true);
+    } else {
+      setChangesDetected(false);
+    }
+    console.log(isChangesDetected);
+
   }
 
 
   function handleChangeName(e) {
     setName(e.target.value);
     formValidator.handleChange(e);
+    setChangesDetected()
+    if((currentUser.name !== name) || currentUser.email !== email) {
+      setChangesDetected(true);
+    } else {
+      setChangesDetected(false);
+    }
+    console.log(isChangesDetected);
+
   }
 
   function handleSubmit(e) {
@@ -33,6 +49,7 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
     e.preventDefault();
     if(currentUser.name !== name || currentUser.email !== email) {
       onUpdate({ name: name|| currentUser.name, email: email|| currentUser.email });
+      setChangesDetected(false);
     }
   }
 
@@ -49,12 +66,12 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
             <label htmlFor="">E-maill</label>
             <input className={`profile__form_maill ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "profile__form_maill_disabled" : ""}`} id="input-email" type="email" required name="email"  pattern="[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-zA-Z]{2,}" value={email || currentUser.email} onChange={handleChangeEmail} placeholder="" disabled={(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
           </div>
-          <p className='profile__form_maill-error'>{formValidator.errors.email}</p>      
-          <button className={`profile__navigation_change ${(isProcessed  || !formValidator.isValid) ? "profile__navigation_change_disabled" : ""}`} aria-label="редактировать" disabled={(isProcessed  ||  !formValidator.isValid) ? "disabled" : ""}>
+          <p className='profile__form_maill-error'>{formValidator.errors.email}</p>
+          <button className={`profile__navigation_change ${(isProcessed  || !formValidator.isValid || !isChangesDetected) ? "profile__navigation_change_disabled" : ""}`} aria-label="редактировать" disabled={(isProcessed  ||  !formValidator.isValid || !isChangesDetected) ? "disabled" : ""}>
           Редактировать
           </button>
         </form>
-        <Link className='profile__navigation_out' aria-label="выйти" to="/signin" onClick={onLogOut}>
+        <Link className='profile__navigation_out' aria-label="выйти" to="/" onClick={onLogOut}>
           Выйти из аккаунта
         </Link>
       </section>

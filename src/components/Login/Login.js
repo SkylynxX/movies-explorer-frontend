@@ -35,7 +35,9 @@ const Login = ({onSignIn, isProcessed, isRequestSuccess}) => {
   return (
 
     <section className='login'>
-    <img className='login__circle' src={circle} alt="Логотип сайта, круг"/>
+    <Link className="login__link-circle" aria-label="логотип" to="/">
+      <img className='login__circle' src={circle} alt="Логотип сайта, круг"/>
+    </Link>
     <h2 className='login__title'>Рады видеть!</h2>
     <form action="" className='login__form'  name='signin' onSubmit={handleSubmit}>
       <label className='login__form_label' htmlFor="">E-maill</label>

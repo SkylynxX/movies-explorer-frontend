@@ -71,26 +71,11 @@ function App() {
   
 
   useEffect(() => {
-    //валидируем токен через API авторизации
-    const userToken = localStorage.getItem("jwt");
-    if (userToken) {
-      mainAPI
-        .validateToken(userToken)
-        .then((userData) => {
-          if (userData) {
-            // console.log(userData)
-            setLoggedIn(true);
-            history.push("/");
-          }
-        })
-        .catch((err) => {
-          //попадаем сюда если один из промисов завершится ошибкой
-          console.log(err);
-        });
-    }
-  
+  validateTocken();
   }, [history]);
   
+
+
   useEffect(() => {
     mainAPI
       .getUserInfo()
@@ -112,6 +97,27 @@ function App() {
 // useEffect(() => {
 //   console.log(isRequestProcessed);
 // }, [isRequestProcessed]);
+  function validateTocken(){
+        //валидируем токен через API авторизации
+        console.log('Validate tocken')
+        const userToken = localStorage.getItem("jwt");
+        if (userToken) {
+          mainAPI
+            .validateToken(userToken)
+            .then((userData) => {
+              if (userData) {
+                console.log(userData)
+                setLoggedIn(true);
+              }
+            })
+            .catch((err) => {
+              //попадаем сюда если один из промисов завершится ошибкой
+              console.log(err);
+              handleSignOut();
+              history.push("/");
+            });
+        }
+  }
 
   function filterMovies(searchRequest) {
     let filterRes = []
@@ -203,21 +209,17 @@ function App() {
     setSearchShortMovie(!isSearchShortMovie);
   }
 
-  function redirectToSignIn() {
-    handleSignOut();
-    history.push("/signin");
-  }
 
   function handleSignUp(userData) {
     setUserRequestSuccess(false);
     setUserRequestProcessed(true);
     mainAPI
       .signUp(userData)
-      .then((userData) => {
-      setUserRequestSuccess(true);
-      setUserRequestProcessed(false);
+      .then((repData) => {
+        setUserRequestSuccess(true);
+        setUserRequestProcessed(false);
         //Ждем 5 секунды чтобы дать человеку прочитать что у него всё получилось
-        setTimeout(redirectToSignIn, 5000);
+        setTimeout(handleSignIn, 5000,userData);
       })
       .catch((err) => {
         //В случае не успешной регистрации показываем окно не успеха
@@ -240,7 +242,7 @@ function App() {
         setUserRequestSuccess(true);
         setUserRequestProcessed(false);
         setLoggedIn(true);
-        history.push("/");
+        history.push("/movies");
       })
       .catch((err) => {
         //В случае не успешной авторизации показываем окно не успеха
@@ -259,6 +261,8 @@ function App() {
       .then((userReceivedData) => {
         // console.log(userReceivedData);
         //В случае успешной авторизации
+        
+        setCurrentUser(userData);
         setUserRequestSuccess(true);
         setUserRequestProcessed(false);
       })
@@ -317,7 +321,17 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
         <Switch>
-
+          <Route exact path="/">
+            <Header color="pink" isLoggedIn={isLoggedIn} />
+            <Main />
+            <Footer />
+          </Route>
+          <Route path="/signin">
+            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
+          </Route>
+          <Route path="/signup">
+            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
+          </Route>
           <ProtectedRoute path="/profile" isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn}/>
             <Profile onLogOut={handleSignOut} onUpdate={handleUpdateUser}/>
@@ -360,19 +374,7 @@ function App() {
             />
             <Footer />
           </ProtectedRoute>
-          
-          <Route exact path="/">
-            <Header color="pink" isLoggedIn={isLoggedIn} />
-            <Main />
-            <Footer />
-          </Route>
-          <Route path="/signin">
-            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
-          <Route path="/signup">
-            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
-          <Route path="*">
+          <Route path="/*">
             <Error404 />
           </Route>
         </Switch>
