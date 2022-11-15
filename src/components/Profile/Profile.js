@@ -6,8 +6,8 @@ import { useFormWithValidation } from '../Validation/Validation';
 
 const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
   const currentUser = useContext(CurrentUserContext);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState(currentUser.email);
+  const [name, setName] = useState(currentUser.name);
   const [isRequestExecuted,setRequestExecuted] = useState(false);
   const [isChangesDetected,setChangesDetected] = useState(false);
   const formValidator = useFormWithValidation();
@@ -18,14 +18,22 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
     }
   }, [isProcessed]);
 
+  useEffect(() => {
+    setEmail(currentUser.email);
+    setName(currentUser.name);
+  }, [currentUser]);
+  
+  useEffect(() => {
+  if((currentUser.name !== name) || currentUser.email !== email) {
+    setChangesDetected(true);
+  } else {
+    setChangesDetected(false);
+  }
+}, [email, name]);
+
   function handleChangeEmail(e) {
     setEmail(e.target.value);
     formValidator.handleChange(e);
-    if((currentUser.name !== name) || currentUser.email !== email) {
-      setChangesDetected(true);
-    } else {
-      setChangesDetected(false);
-    }
     console.log(isChangesDetected);
 
   }
@@ -34,21 +42,13 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
   function handleChangeName(e) {
     setName(e.target.value);
     formValidator.handleChange(e);
-    setChangesDetected()
-    if((currentUser.name !== name) || currentUser.email !== email) {
-      setChangesDetected(true);
-    } else {
-      setChangesDetected(false);
-    }
-    console.log(isChangesDetected);
-
   }
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
     if(currentUser.name !== name || currentUser.email !== email) {
-      onUpdate({ name: name|| currentUser.name, email: email|| currentUser.email });
+      onUpdate({ name: name, email: email});
       setChangesDetected(false);
     }
   }
@@ -59,12 +59,12 @@ const Profile = ({onLogOut, onUpdate, isProcessed, isRequestSuccess}) => {
         <form action="" className='profile__form'  onSubmit={handleSubmit}>
           <div className='profile__form_box-name'>
             <label htmlFor="">Имя</label>
-            <input className={`profile__form_name ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "profile__form_name_disabled" : ""}`} type="text" required minLength="3" maxLength="40" name="name" value={name || currentUser.name} onChange={handleChangeName} placeholder="" disabled={(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
+            <input className={`profile__form_name ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "profile__form_name_disabled" : ""}`} type="text" required minLength="3" maxLength="40" name="name" value={name} onChange={handleChangeName} placeholder="" disabled={(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
           </div>
           <p className='profile__form_name-error'>{formValidator.errors.name}</p>
           <div className='profile__form_box-maill'>
             <label htmlFor="">E-maill</label>
-            <input className={`profile__form_maill ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "profile__form_maill_disabled" : ""}`} id="input-email" type="email" required name="email"  pattern="[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-zA-Z]{2,}" value={email || currentUser.email} onChange={handleChangeEmail} placeholder="" disabled={(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
+            <input className={`profile__form_maill ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "profile__form_maill_disabled" : ""}`} id="input-email" type="email" required name="email"  pattern="[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$" value={email} onChange={handleChangeEmail} placeholder="" disabled={(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
           </div>
           <p className='profile__form_maill-error'>{formValidator.errors.email}</p>
           <button className={`profile__navigation_change ${(isProcessed  || !formValidator.isValid || !isChangesDetected) ? "profile__navigation_change_disabled" : ""}`} aria-label="редактировать" disabled={(isProcessed  ||  !formValidator.isValid || !isChangesDetected) ? "disabled" : ""}>

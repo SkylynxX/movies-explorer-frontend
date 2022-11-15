@@ -41,7 +41,7 @@ const Login = ({onSignIn, isProcessed, isRequestSuccess}) => {
     <h2 className='login__title'>Рады видеть!</h2>
     <form action="" className='login__form'  name='signin' onSubmit={handleSubmit}>
       <label className='login__form_label' htmlFor="">E-maill</label>
-      <input className={`login__form_input ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "login__form_input_disable" : ""}`} id="input-email" type="email" required name="email" value={email} pattern="[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}.[a-zA-Z]{2,}" onChange={handleChangeEmail} placeholder="" disabled = {(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
+      <input className={`login__form_input ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "login__form_input_disable" : ""}`} id="input-email" type="email" required name="email" value={email} pattern="[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}" onChange={handleChangeEmail} placeholder="" disabled = {(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "disabled" : ""}/>
       <p className='login__form_error-email'>{formValidator.errors.email}</p>
       <label className='login__form_label' htmlFor="">Пароль</label>
       <input className={`login__form_input ${(isProcessed  || (isRequestExecuted && isRequestSuccess)) ? "login__form_input_disabled" : ""}`} id="input-password" type="password" required name="password" minLength="3" maxLength="40" value={password} onChange={handleChangePassword} placeholder="" disabled = {(isProcessed  || (isRequestExecuted && isRequestSuccess))? "disabled" : ""}/>

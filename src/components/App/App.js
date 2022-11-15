@@ -14,6 +14,7 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import mainAPI from "../../utils/MainApi";
 import moviesAPI from "../../utils/MoviesApi";
 import {ProtectedRoute} from "../ProtectedRoute/ProtectedRoute";
+import {CoveredRoute} from "../CoveredRoute/CoveredRoute";
 
 import "./App.css";
 
@@ -25,6 +26,8 @@ function App() {
   const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
   const [isSearchShortMovie, setSearchShortMovie] = useState(false);
   const [searchMovieString, setSearchMovieString] = useState("");
+  const [isSearchShortSavedMovie, setSearchShortSavedMovie] = useState(false);
+  const [searchSavedMovieString, setSearchSavedMovieString] = useState("");
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isMoviesRequestProcessed, setMoviesRequestProcessed] = useState(false);
@@ -49,32 +52,28 @@ function App() {
   }, [width]);
 
   useEffect(() => {
-    if(width < 768) {
+    if (width < 768) {
       setMoviesListAddition(5);
     } else {
       setMoviesListAddition(7);
     }
-  },[width]);
+  }, [width]);
 
   function addMoviesListCallback(additionSizeSettings) {
-    if (additionSizeSettings==='default')
-    {
+    if (additionSizeSettings === "default") {
       setMoviesListSize(moviesListAddition);
     } else {
       setMoviesListSize(moviesListSize + moviesListAddition);
     }
   }
 
-  useEffect(() => {
-    filterSavedMovies(searchMovieString);
-  }, [savedMovies]);
-  
+  // useEffect(() => {
+  //   filterSavedMovies(searchSavedMovieString);
+  // }, [searchSavedMovieString]);
 
   useEffect(() => {
-  validateTocken();
+    validateTocken();
   }, [history]);
-  
-
 
   useEffect(() => {
     mainAPI
@@ -90,59 +89,74 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getSavedMovies("");
+      getSavedMovies();
+      if (localStorage.hasOwnProperty("movies")) {
+        movies = JSON.parse(localStorage.getItem("movies"));
+      }
+      if (localStorage.hasOwnProperty("filterMovie")) {
+        setFilteredMovies(JSON.parse(localStorage.getItem("filterMovie")));
+      }
+      if (localStorage.hasOwnProperty("searchString")) {
+        setSearchMovieString(localStorage.getItem("searchString"));
+      }
+      if (localStorage.hasOwnProperty("shortCheckbox")) {
+        setSearchShortMovie(localStorage.getItem("shortCheckbox") === 'true');
+      }
     }
   }, [isLoggedIn]);
-  
-// useEffect(() => {
-//   console.log(isRequestProcessed);
-// }, [isRequestProcessed]);
-  function validateTocken(){
-        //валидируем токен через API авторизации
-        console.log('Validate tocken')
-        const userToken = localStorage.getItem("jwt");
-        if (userToken) {
-          mainAPI
-            .validateToken(userToken)
-            .then((userData) => {
-              if (userData) {
-                console.log(userData)
-                setLoggedIn(true);
-              }
-            })
-            .catch((err) => {
-              //попадаем сюда если один из промисов завершится ошибкой
-              console.log(err);
-              handleSignOut();
-              history.push("/");
-            });
-        }
+
+  function validateTocken() {
+    //валидируем токен через API авторизации
+    const userToken = localStorage.getItem("jwt");
+    if (userToken) {
+      mainAPI
+        .validateToken(userToken)
+        .then((userData) => {
+          if (userData) {
+            setLoggedIn(true);
+          }
+        })
+        .catch((err) => {
+          //попадаем сюда если один из промисов завершится ошибкой
+          console.log(err);
+          handleSignOut();
+          history.push("/");
+        });
+    }
   }
 
   function filterMovies(searchRequest) {
-    let filterRes = []
+    let filterRes = [];
     if (searchRequest) {
-      filterRes = movies.filter((item) => { return ((item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1)
-       && (isSearchShortMovie ?  item.duration <= 40 : true))  });
+      filterRes = movies.filter((item) => {
+        return (
+          item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1 &&
+          (isSearchShortMovie ? item.duration <= 40 : true)
+        );
+      });
     }
     // console.log(filterRes);
     setFilteredMovies(filterRes);
+    localStorage.setItem("searchString", searchRequest);
+    localStorage.setItem("shortCheckbox", isSearchShortMovie);
+    localStorage.setItem("filterMovie", JSON.stringify(filterRes));
   }
 
   function filterSavedMovies(searchRequest) {
-    let filterRes = []
-    if (searchRequest) {
-      filterRes = savedMovies.filter((item) => { return ((item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1)
-       && (isSearchShortMovie ?  item.duration <= 40 : true))  });
-    }
-    //  console.log(filterRes);
+    let filterRes = [];
+    filterRes = savedMovies.filter((item) => {
+      return (
+        item.nameRU.toLowerCase().indexOf(searchRequest.toLowerCase()) > -1 &&
+        (isSearchShortSavedMovie ? item.duration <= 40 : true)
+      );
+    });
+    console.log(filterRes);
     setFilteredSavedMovies(filterRes);
   }
 
-
   function getMovies() {
-    // if (!localStorage.hasOwnProperty("movies")) {
-      if (! movies.length) {
+    if (!localStorage.hasOwnProperty("movies")) {
+      // if (! movies.length) {
       setMoviesRequestSuccess(false);
       setMoviesRequestProcessed(true);
       moviesAPI
@@ -160,8 +174,8 @@ function App() {
           //попадаем сюда если промис завершится ошибкой
           console.log(err);
         });
-        // console.log("getMovies(searchRequest) API done");
-    } else if (history.location.pathname === "/movies" && movies.length) {
+      // console.log("getMovies(searchRequest) API done");
+    } else if (history.location.pathname === "/movies") {
       setMoviesRequestSuccess(false);
       setMoviesRequestProcessed(true);
       movies = JSON.parse(localStorage.getItem("movies"));
@@ -175,7 +189,7 @@ function App() {
 
   function getSavedMovies() {
     // if (!localStorage.hasOwnProperty("movies")) {
-      mainAPI
+    mainAPI
       .getSavedMovies()
       .then((rxSavedMovies) => {
         setSavedMovies(rxSavedMovies);
@@ -191,24 +205,22 @@ function App() {
       });
   }
 
-
-
-
-
   function searchMoviesCallback(searchRequest) {
     setSearchMovieString(searchRequest);
-    if (history.location.pathname === "/movies") {
-      getMovies();
-    } else if (history.location.pathname === "/saved-movies") {
-      getSavedMovies();
-    }
+    getMovies();
   }
 
-  
+  function searchSavedMoviesCallback(searchRequest) {
+    filterSavedMovies(searchSavedMovieString);
+  }
+
   function toggleSearchShortMovieHandler() {
     setSearchShortMovie(!isSearchShortMovie);
   }
 
+  function toggleSearchShortSavedMovieHandler() {
+    setSearchShortSavedMovie(!isSearchShortSavedMovie);
+  }
 
   function handleSignUp(userData) {
     setUserRequestSuccess(false);
@@ -219,12 +231,12 @@ function App() {
         setUserRequestSuccess(true);
         setUserRequestProcessed(false);
         //Ждем 5 секунды чтобы дать человеку прочитать что у него всё получилось
-        setTimeout(handleSignIn, 5000,userData);
+        setTimeout(handleSignIn, 5000, userData);
       })
       .catch((err) => {
         //В случае не успешной регистрации показываем окно не успеха
-      setUserRequestSuccess(false);
-      setUserRequestProcessed(false);
+        setUserRequestSuccess(false);
+        setUserRequestProcessed(false);
         console.log(err);
       });
   }
@@ -261,7 +273,7 @@ function App() {
       .then((userReceivedData) => {
         // console.log(userReceivedData);
         //В случае успешной авторизации
-        
+
         setCurrentUser(userData);
         setUserRequestSuccess(true);
         setUserRequestProcessed(false);
@@ -275,11 +287,9 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("movies");
+    localStorage.clear();
     setSavedMovies([]);
     setLoggedIn(false);
-
   }
 
   function handleMovieSave(movie) {
@@ -306,7 +316,9 @@ function App() {
     mainAPI
       .removeSavedMovie(movie._id)
       .then(() => {
-        setSavedMovies((prevState) => prevState.filter((item) => item.movieId !== movie.id));
+        setSavedMovies((prevState) =>
+          prevState.filter((item) => item.movieId !== movie.id)
+        );
         setMoviesRequestSuccess(true);
         setMoviesRequestProcessed(false);
       })
@@ -326,15 +338,23 @@ function App() {
             <Main />
             <Footer />
           </Route>
-          <Route path="/signin">
-            <Login  onSignIn={handleSignIn} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
-          <Route path="/signup">
-            <Register onSignUp={handleSignUp} isProcessed={isUserRequestProcessed} isRequestSuccess={isUserRequestSuccess}/>
-          </Route>
+          <CoveredRoute path="/signin">
+            <Login
+              onSignIn={handleSignIn}
+              isProcessed={isUserRequestProcessed}
+              isRequestSuccess={isUserRequestSuccess}
+            />
+          </CoveredRoute>
+          <CoveredRoute path="/signup">
+            <Register
+              onSignUp={handleSignUp}
+              isProcessed={isUserRequestProcessed}
+              isRequestSuccess={isUserRequestSuccess}
+            />
+          </CoveredRoute>
           <ProtectedRoute path="/profile" isLoggedIn={isLoggedIn}>
-            <Header color="white" isLoggedIn={isLoggedIn}/>
-            <Profile onLogOut={handleSignOut} onUpdate={handleUpdateUser}/>
+            <Header color="white" isLoggedIn={isLoggedIn} />
+            <Profile onLogOut={handleSignOut} onUpdate={handleUpdateUser} />
           </ProtectedRoute>
           <ProtectedRoute path="/movies" isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn} />
@@ -355,12 +375,12 @@ function App() {
             />
             <Footer />
           </ProtectedRoute>
-          <ProtectedRoute path="/saved-movies"  isLoggedIn={isLoggedIn}>
+          <ProtectedRoute path="/saved-movies" isLoggedIn={isLoggedIn}>
             <Header color="white" isLoggedIn={isLoggedIn} />
             <SavedMovies
-              searchMoviesCallback={searchMoviesCallback}
-              toggleSearchShortMovieHandler={toggleSearchShortMovieHandler}
-              isSearchShortMovie={isSearchShortMovie}
+              searchMoviesCallback={searchSavedMoviesCallback}
+              toggleSearchShortMovieHandler={toggleSearchShortSavedMovieHandler}
+              isSearchShortMovie={isSearchShortSavedMovie}
               movies={filteredSavedMovies}
               savedMovies={savedMovies}
               isProcessed={isMoviesRequestProcessed}
@@ -369,12 +389,13 @@ function App() {
               moviesListSize={savedMovies.length}
               onLike={handleMovieSave}
               onUnlike={handleMovieDelete}
-              searchMovieString={searchMovieString}
-              setSearchMovieString={setSearchMovieString}
+              searchMovieString={searchSavedMovieString}
+              setSearchMovieString={setSearchSavedMovieString}
+              filterSavedMovies={filterSavedMovies}
             />
             <Footer />
           </ProtectedRoute>
-          <Route path="/*">
+          <Route path="*">
             <Error404 />
           </Route>
         </Switch>
