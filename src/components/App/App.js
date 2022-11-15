@@ -67,9 +67,9 @@ function App() {
     }
   }
 
-  // useEffect(() => {
-  //   filterSavedMovies(searchSavedMovieString);
-  // }, [searchSavedMovieString]);
+  useEffect(() => {
+    filterSavedMovies(searchSavedMovieString);
+  }, [savedMovies]);
 
   useEffect(() => {
     validateTocken();
@@ -150,7 +150,7 @@ function App() {
         (isSearchShortSavedMovie ? item.duration <= 40 : true)
       );
     });
-    console.log(filterRes);
+    // console.log(filterRes);
     setFilteredSavedMovies(filterRes);
   }
 
@@ -319,6 +319,7 @@ function App() {
         setSavedMovies((prevState) =>
           prevState.filter((item) => item.movieId !== movie.id)
         );
+        filterSavedMovies(searchSavedMovieString);
         setMoviesRequestSuccess(true);
         setMoviesRequestProcessed(false);
       })

@@ -8,14 +8,13 @@ export default function SavedMovies({ searchMoviesCallback,toggleSearchShortMovi
   
   const [isRequestExecuted,setRequestExecuted] = useState(false);
   useEffect(() => {
-    console.log("useEffect() SavedMovies")
+    // console.log("useEffect() SavedMovies")
     if (isProcessed) {
       setRequestExecuted(true);
-      console.log("useEffect isProcessed")
+      // console.log("useEffect isProcessed")
     }
     if(!isRequestExecuted && !movies.length){
-      movies = savedMovies;
-      console.log("useEffect filterSavedMovies")
+      // console.log("useEffect filterSavedMovies")
       filterSavedMovies("");
       
     }
