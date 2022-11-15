@@ -13,6 +13,7 @@
   height: 22px;
 }
 
+
 .header-menu__container {
   display: flex;
   justify-content: flex-end;
@@ -78,6 +79,9 @@
   text-align: right;
 }
 
+.header-menu__link_current {
+  font-weight: 550;
+}
 @media (max-width: 768px) {
   .header-menu__link {
     font-style: normal;
@@ -107,6 +111,10 @@
   line-height: 12px;
   padding: 0 11px;
   cursor: pointer
+}
+
+.header-menu__profile_current{
+  font-weight: 550;
 }
 
 @media (max-width: 768px) {

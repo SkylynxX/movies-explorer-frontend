@@ -6,7 +6,7 @@ import "./Navigation.css";
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 
-export default function Navigation({ isLoggedIn, color }) {
+export default function Navigation({ isLoggedIn }) {
   const history = useHistory();
   const current = history.location.pathname;
 
@@ -55,7 +55,8 @@ export default function Navigation({ isLoggedIn, color }) {
         )}
 
         {isLoggedIn ? (
-          <button className="header-menu__profile" aria-label="профиль" type="button"
+          <button className={`header-menu__profile ${
+            ("/profile" === current) ? "header-menu__profile_current" : ""}`} aria-label="профиль" type="button"
             onClick={() => {
               history.push("/profile");
             }} > 
